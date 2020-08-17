@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { useFirestore, useFirestoreCollection, useAuth } from "reactfire";
+import Question from "./components/Question/Question";
+import WorksheetCreator from "./components/WorksheetCreator/WorksheetCreator";
 
 function App() {
+  const firestore = useFirestore();
+
+  const questionsRef = firestore.collection("worksheets");
+
+  // const questions = useFirestoreCollection(questionsRef).docs.map((doc) => ({
+  //   id: doc.id,
+  //   ...doc.data(),
+  // }));
+
+  const auth = useAuth();
+
+  const signOut = async () => {
+    await auth.signOut();
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={() => signOut()}>Sign Out</button>
+      {/* {questions.map((question) => (
+        <Question key={question.id} question={question} />
+      ))} */}
+      <WorksheetCreator />
     </div>
   );
 }
